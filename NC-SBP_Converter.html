@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NC to SBP Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      color: #333;
+      padding: 40px 20px;
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+    }
+
+    #dropArea {
+      border: 3px dashed #666;
+      border-radius: 10px;
+      padding: 40px 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      background: #fff;
+    }
+
+    #dropArea.hover {
+      border-color: #2196F3;
+      background: #e3f2fd;
+    }
+
+    #dropArea p {
+      font-size: 1.2em;
+      margin: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 1em;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      width: 140px;
+      font-size: 1em;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 8px;
+      background: #2196F3;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #1976D2;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #555;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h2>NC → SBP Converter</h2>
+  
+  <label for="speedInput">Router Speed (RPM):</label>
+  <input type="number" id="speedInput" value="12000" min="1000" step="500">
+
+  <div id="dropArea">
+    <p>Drag & drop your .nc file here, or click to select</p>
+    <input type="file" id="fileInput" accept=".nc,.gcode" style="display:none">
+  </div>
+
+  <button id="processBtn">Convert & Download</button>
+
+  <script>
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+
+    // Click to open file dialog
+    dropArea.addEventListener('click', () => fileInput.click());
+
+    // Highlight on drag
+    ['dragenter', 'dragover'].forEach(event => {
+      dropArea.addEventListener(event, e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropArea.classList.add('hover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(event => {
+      dropArea.addEventListener(event, e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropArea.classList.remove('hover');
+      });
+    });
+
+    // Handle file drop
+    dropArea.addEventListener('drop', e => {
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        fileInput.files = files;
+      }
+    });
+
+    document.getElementById('processBtn').addEventListener('click', () => {
+      if (fileInput.files.length === 0) {
+        alert("Please choose a G-code (.nc) file first.");
+        return;
+      }
+
+      const rpm = document.getElementById('speedInput').value || 12000;
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const gcode = e.target.result;
+
+        const prependLines = [
+          "SO,1,1\t\t\t\t\t' Turn on router",
+          `M3 S${rpm}\t\t\t\t' Set spindle speed`,
+          "PAUSE 2\t\t\t\t' Give router time to reach cutting rpm"
+        ].join("\n");
+
+        const modified = prependLines + "\n" + gcode;
+
+        const blob = new Blob([modified], {type: "text/plain"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = file.name.replace(/\.[^/.]+$/, "") + ".sbp";
+        link.click();
+      };
+
+      reader.readAsText(file);
+    });
+  </script>
+
+  <footer>
+    Software vibe-coded by Mr. Lloyd with ChatGPT ⚡🤖
+  </footer>
+</body>
+</html>

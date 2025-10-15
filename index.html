@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNC Machine Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            background-color: #0073e6;
+            color: white;
+            padding: 20px 0;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            margin-top: 50px;
+        }
+        td {
+            width: 50%;
+            padding: 20px;
+        }
+        .machine-image {
+            width: 80%;
+            max-width: 300px;
+            cursor: pointer;
+            border: 2px solid #0073e6;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .machine-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+        footer {
+            margin-top: 50px;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Choose which machine you are trying to run:</h1>
+
+    <table>
+        <tr>
+            <td>
+              <a href="shark.html">
+                    <img src="shark.jpg" alt="Shark" width="520" height="396" class="machine-image">
+                </a>
+              <p>Shark CNC</p>
+          </td>
+            <td>
+                <a href="shopbot.html">
+                    <img src="shopbot.jpg" alt="ShopBot" width="708" height="400" class="machine-image"></a><a href="shopbot.html">
+                </a>
+              <p>ShopBot</p>
+          </td>
+        </tr>
+    </table>
+
+    <footer>Website by Mr. Lloyd with ChatGPT 🤖</footer>
+</body>
+</html>
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shark CNC Instructions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            background-color: #0073e6;
+            color: white;
+            padding: 20px 0;
+            margin: 0;
+        }
+        table {
+            width: 90%;
+            margin: 40px auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        td {
+            border-bottom: 1px solid #ddd;
+            padding: 20px;
+            vertical-align: top;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .step-title {
+            font-weight: bold;
+            color: #0073e6;
+            font-size: 1.2em;
+        }
+        .placeholder {
+            width: 80%;
+            max-width: 400px;
+            height: 200px;
+            background-color: #e0e0e0;
+            border: 2px dashed #aaa;
+            border-radius: 10px;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+        .back-button {
+            display: inline-block;
+            margin: 30px auto;
+            padding: 10px 20px;
+            background-color: #0073e6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        .back-button:hover {
+            background-color: #005bb5;
+        }
+        footer {
+            margin-top: 30px;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Running the Shark CNC</h1>
+
+    <table>
+        <tr>
+            <td>
+                <div class="step-title">Step 1: Prepare your design in Easel.com</div>
+                <div class="placeholder"><iframe width="400" height="200" src="https://www.youtube.com/embed/L2otrWMQvOo?si=Nd4ER7Bx2oXHfBlN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="step-title">Step 2: Is this your first time running Easel?</div>
+                <div class="placeholder"><iframe width="400" height="200" src="https://www.youtube.com/embed/fGzew33k_kE?si=athomPjzi482RXnn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="step-title">Step 3: Download your G-Code</div>
+                <div class="placeholder"><img src="gcodesave.gif" width="396" height="199" alt=""/></div>
+            </td>
+        </tr>
+        <tr>
+            <td height="291">
+                <div class="step-title">Step 4: Use <a href="NC-TAP_Converter.html">this tool</a> to convert your file to a .TAP file for running on the Shark CNC</div>
+                <div class="placeholder"><a href="NC-TAP_Converter.html"><img src="tap.png" width="400" height="200" alt=""/></a></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="step-title">Step 5: Transfer your file to the Shark using a USB drive</div>
+                <div class="placeholder"><img src="usbplug.gif" width="400" height="200" alt=""/></div>
+            </td>
+        </tr>
+    </table>
+
+    <a href="index.html" class="back-button">⬅ Back to Home</a>
+
+    <footer>Website by Mr. Lloyd with ChatGPT 🤖</footer>
+
+</body>
+</html>
+

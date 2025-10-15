@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NC → TAP Converter (NextWave Shark)</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+      background: #f7f9fc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.25em;
+      color: #1a1a1a;
+      text-align: center;
+    }
+
+    p.note {
+      font-size: 1rem;
+      color: #555;
+      text-align: center;
+      margin-bottom: 2em;
+      max-width: 600px;
+    }
+
+    #dropZone {
+      border: 3px dashed #4a90e2;
+      border-radius: 16px;
+      background: white;
+      padding: 40px;
+      width: 360px;
+      text-align: center;
+      color: #555;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    #dropZone.dragover {
+      background: #e8f2ff;
+      border-color: #0078ff;
+      color: #0078ff;
+      transform: scale(1.02);
+    }
+
+    button {
+      margin-top: 1.5em;
+      font-size: 1.1rem;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 40px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #3578d4;
+      transform: translateY(-1px);
+    }
+
+    #status {
+      margin-top: 1em;
+      font-size: 1rem;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>NC → TAP Converter</h1>
+  <p class="note">Drag a <strong>.nc</strong> file here or click below.<br>
+  The tool adds spindle start lines and <code>M02</code> automatically, then downloads your <strong>.tap</strong> file.</p>
+
+  <div id="dropZone">📂 Drop .NC file here or click to browse</div>
+  <button id="convertBtn">Convert to .tap</button>
+  <div id="status"></div>
+
+<script>
+const dropZone = document.getElementById('dropZone');
+const convertBtn = document.getElementById('convertBtn');
+const status = document.getElementById('status');
+let selectedFile = null;
+
+// Highlight on drag
+dropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  selectedFile = e.dataTransfer.files[0];
+  dropZone.textContent = `✅ Selected: ${selectedFile.name}`;
+});
+
+// Click-to-browse
+dropZone.addEventListener('click', () => {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.nc,.NC';
+  fileInput.onchange = (e) => {
+    selectedFile = e.target.files[0];
+    dropZone.textContent = `✅ Selected: ${selectedFile.name}`;
+  };
+  fileInput.click();
+});
+
+convertBtn.addEventListener('click', () => {
+  status.textContent = '';
+  if (!selectedFile) {
+    status.textContent = 'Please select a .nc file first.';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const content = e.target.result;
+    const lines = content.split(/\r?\n/);
+
+    const prepend = ["S20000", "M3", "G04 P6"];
+    const combined = prepend.concat(lines);
+
+    // Remove empty trailing lines
+    while (combined.length > 0 && combined[combined.length - 1].trim() === "") {
+      combined.pop();
+    }
+
+    if (combined.length === 0 || combined[combined.length - 1].trim().toUpperCase() !== "M02") {
+      combined.push("M02");
+    }
+
+    const tapContent = combined.join("\r\n") + "\r\n";
+    const baseName = selectedFile.name.replace(/\.[^/.]+$/, "");
+    const downloadName = baseName + ".tap";
+
+    const blob = new Blob([tapContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = downloadName;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    status.textContent = `✅ Converted and downloaded: ${downloadName}`;
+  };
+  reader.onerror = () => status.textContent = 'Error reading file.';
+  reader.readAsText(selectedFile);
+});
+</script>
+</body>
+</html>
